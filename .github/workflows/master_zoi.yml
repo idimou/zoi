@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - zoi
+name: Build and deploy Python app to Azure Web App - zoi
 
 on:
   push:
@@ -10,26 +10,25 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Set up Python version
+      uses: actions/setup-python@v1
       with:
-        dotnet-version: '3.1.102'
+        python-version: '3.8'
 
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+    - name: Build using AppService-Build
+      uses: azure/appservice-build@v2
+      with:
+        platform: python
+        platform-version: '3.8'
 
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: Deploy to Azure Web App
+    - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'zoi'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_5e9768bb64cd4f628d90609233fc1cf0 }}
-        package: ${{env.DOTNET_ROOT}}/myapp 
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b2244dc79329402599abee362e5f5d57 }}
